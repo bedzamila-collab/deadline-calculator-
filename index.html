@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>LevelUp — сколько часов нужно до твоей цели</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f0f4f8;
+      font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, 'Inter', sans-serif;
+      padding: 2rem 1.5rem;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .calculator {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      background: white;
+      border-radius: 48px;
+      box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+    }
+
+    .hero {
+      background: #002868;
+      padding: 2rem 2rem 1.2rem;
+      text-align: center;
+      color: white;
+      border-bottom: 6px solid #BF0A30;
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .sub {
+      font-size: 1.1rem;
+      margin-top: 8px;
+      color: #e0e8ff;
+    }
+
+    .trust-badge {
+      background: #f0f4f8;
+      margin: 0 2rem 1rem 2rem;
+      padding: 0.8rem 1.5rem;
+      border-radius: 60px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #002868;
+      font-weight: 500;
+    }
+    .trust-badge button {
+      background: none;
+      border: none;
+      color: #BF0A30;
+      text-decoration: underline;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .content {
+      padding: 2rem;
+    }
+
+    .section {
+      background: white;
+      border-radius: 32px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid #dce5f0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #002868;
+    }
+
+    .level-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .level-card {
+      flex: 1 1 130px;
+      background: white;
+      border-radius: 20px;
+      padding: 10px 10px;
+      text-align: center;
+      cursor: pointer;
+      border: 2px solid #dce5f0;
+      transition: all 0.2s;
+    }
+
+    .level-card.selected {
+      background: #BF0A30;
+      border-color: #002868;
+      color: white;
+    }
+    .level-card.selected .level-desc {
+      color: #ffe0e0;
+    }
+
+    .level-card.disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      filter: grayscale(0.2);
+    }
+
+    .level-name {
+      font-weight: 800;
+      font-size: 1.3rem;
+    }
+
+    .level-desc {
+      font-size: 0.7rem;
+      color: #5e6b7c;
+      margin-top: 6px;
+      line-height: 1.35;
+      text-align: left;
+    }
+
+    .level-hint {
+      font-size: 0.78rem;
+      color: #8a96a3;
+      margin-top: 8px;
+      margin-bottom: 2px;
+    }
+
+    .test-button-container {
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px dashed #dce5f0;
+      text-align: center;
+    }
+
+    .test-btn {
+      background-color: #002868;
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 40px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .hours-block {
+      background: #f0f4f8;
+      border-radius: 32px;
+      padding: 1.2rem;
+      margin-top: 0.5rem;
+    }
+    input[type="range"] {
+      width: 100%;
+      height: 8px;
+      accent-color: #BF0A30;
+    }
+    .hours-value {
+      background: #002868;
+      display: inline-block;
+      padding: 10px 24px;
+      border-radius: 48px;
+      color: white;
+      font-weight: bold;
+      font-size: 1.3rem;
+      margin-top: 15px;
+    }
+    .quick-hours {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .quick-hour-btn {
+      background: white;
+      border: 1px solid #dce5f0;
+      padding: 6px 16px;
+      border-radius: 40px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .option-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin: 15px 0 10px;
+    }
+
+    .option-card {
+      background: white;
+      border-radius: 28px;
+      padding: 12px 18px;
+      flex: 1 1 200px;
+      border: 1px solid #dce5f0;
+      cursor: pointer;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .option-card.selected {
+      background: #BF0A30;
+      border-color: #002868;
+      color: white;
+    }
+
+    .info-icon {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      background: #BF0A30;
+      color: white;
+      border-radius: 50%;
+      font-size: 12px;
+      text-align: center;
+      line-height: 18px;
+      margin-left: 6px;
+      cursor: help;
+    }
+
+    .habits-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 15px 0 5px;
+    }
+    .habit-chip {
+      background: white;
+      border-radius: 40px;
+      padding: 8px 20px;
+      border: 1px solid #dce5f0;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .habit-chip.selected {
+      background: #BF0A30;
+      border-color: #002868;
+      color: white;
+    }
+    .extra-tip {
+      font-size: 0.75rem;
+      color: #002868;
+      margin-top: 12px;
+      background: #e8edf3;
+      padding: 8px 12px;
+      border-radius: 24px;
+    }
+
+    .cta-btn {
+      background: #BF0A30;
+      color: white;
+      border: none;
+      width: 100%;
+      padding: 18px;
+      font-size: 1.4rem;
+      font-weight: bold;
+      border-radius: 48px;
+      margin: 20px 0 25px;
+      cursor: pointer;
+      font-family: inherit;
+      box-shadow: 0 6px 0 #8B0000;
+      transform: translateY(-2px);
+    }
+
+    .cta-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 #8B0000;
+    }
+
+    .result-card {
+      background: #002868;
+      border-radius: 40px;
+      padding: 1.8rem;
+      color: white;
+    }
+
+    .result-summary {
+      display: flex;
+      gap: 14px;
+      margin: 18px 0;
+      flex-wrap: wrap;
+    }
+    .result-summary-card {
+      flex: 1 1 220px;
+      background: rgba(255,255,255,0.08);
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 24px;
+      padding: 20px 16px;
+      text-align: center;
+    }
+    .result-summary-card.next {
+      border-color: #BF0A30;
+      background: rgba(191,10,48,0.22);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+    .result-summary-card.goal {
+      border-color: rgba(255,255,255,0.35);
+    }
+    .result-summary-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.7);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .result-summary-card.next .result-summary-label { color: #ffc4c4; }
+    .result-summary-level {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    .result-summary-card.next .result-summary-level { color: #fff; }
+    .months-big {
+      font-size: 2rem;
+      font-weight: 800;
+      background: #BF0A30;
+      display: inline-block;
+      padding: 6px 24px;
+      border-radius: 80px;
+      color: white;
+      margin: 4px 0 10px;
+      text-align: center;
+    }
+    .result-summary-card.goal .months-big {
+      background: rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+    .result-summary-date {
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+    }
+    .result-summary-meta {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.4;
+    }
+
+    .roadmap-container {
+      background: white;
+      border-radius: 28px;
+      padding: 20px;
+      margin: 20px 0;
+      border: 1px solid #dce5f0;
+      color: #1e2a3a;
+    }
+    .roadmap-title {
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #002868;
+      margin-bottom: 16px;
+    }
+    .roadmap-columns {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .roadmap-col {
+      flex: 1 1 220px;
+    }
+    .roadmap-col-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #BF0A30;
+      margin-bottom: 8px;
+      padding-left: 4px;
+    }
+    .roadmap-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .step-item {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      background: #f9fbfe;
+      padding: 8px 12px;
+      border-radius: 14px;
+      border-left: 3px solid #BF0A30;
+    }
+    .step-number {
+      font-weight: 800;
+      font-size: 0.75rem;
+      color: #BF0A30;
+      min-width: 18px;
+      padding-top: 2px;
+    }
+    .step-content {
+      flex: 1;
+    }
+    .step-title {
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: #002868;
+    }
+    .step-desc {
+      font-size: 0.75rem;
+      color: #4a5b6e;
+      margin-top: 2px;
+      line-height: 1.35;
+    }
+    .outcome-card {
+      background: #eef2f7;
+      border-radius: 20px;
+      padding: 12px 16px;
+      margin: 14px 0 8px;
+      text-align: center;
+      font-weight: 500;
+      font-size: 0.85rem;
+      color: #002868;
+    }
+    .trust-method {
+      background: #eef2f7;
+      border-radius: 40px;
+      padding: 12px 20px;
+      text-align: center;
+      font-size: 0.85rem;
+      margin: 20px 0 16px;
+      color: #002868;
+      font-weight: 500;
+    }
+    .cta-btn.calculating {
+      opacity: 0.75;
+      cursor: wait;
+      pointer-events: none;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal-content {
+      background: white;
+      max-width: 500px;
+      margin: 20px;
+      padding: 2rem;
+      border-radius: 48px;
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 25px;
+      font-size: 28px;
+      cursor: pointer;
+    }
+    footer {
+      font-size: 0.7rem;
+      text-align: center;
+      padding: 1rem;
+      background: #f0f4f8;
+      color: #002868;
+    }
+    @media (max-width: 800px) {
+      .content { padding: 1rem; }
+      .months-big { font-size: 1.6rem; }
+      .result-summary-card { flex: 1 1 100%; }
+      .path-arrow { display: none; }
+      .path-card { max-width: none; flex: 1 1 45%; }
+    }
+    .slider-label {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #002868;
+      margin-bottom: 8px;
+    }
+    .slider-badge {
+      background: #BF0A30;
+      color: white;
+      font-size: 0.7rem;
+      padding: 2px 10px;
+      border-radius: 20px;
+      margin-left: 6px;
+      font-weight: 600;
+    }
+    .teacher-note {
+      font-size: 0.75rem;
+      color: #5e6b7c;
+      background: #eef2f7;
+      border-radius: 16px;
+      padding: 8px 14px;
+      margin-top: 10px;
+      line-height: 1.5;
+    }
+    .total-hours-line {
+      background: #002868;
+      color: white;
+      border-radius: 20px;
+      padding: 10px 18px;
+      font-size: 0.88rem;
+      margin-top: 14px;
+      text-align: center;
+    }
+    .total-hours-line strong { color: #FFD700; }
+    .path-timeline-wrap {
+      background: white;
+      border-radius: 28px;
+      padding: 20px;
+      margin: 20px 0;
+      border: 1px solid #dce5f0;
+      color: #1e2a3a;
+    }
+    .path-timeline-title {
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #002868;
+      margin-bottom: 16px;
+    }
+    .path-timeline {
+      display: flex;
+      align-items: stretch;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .path-arrow {
+      display: flex;
+      align-items: center;
+      color: #b0bcc9;
+      font-size: 1.2rem;
+      font-weight: 300;
+      padding: 0 2px;
+    }
+    .path-card {
+      flex: 1 1 120px;
+      max-width: 160px;
+      background: white;
+      border-radius: 20px;
+      padding: 16px 12px;
+      text-align: center;
+      border: 2px solid #dce5f0;
+    }
+    .path-card.current {
+      border-style: dashed;
+      border-color: #b0bcc9;
+    }
+    .path-card.next {
+      border-color: #BF0A30;
+      box-shadow: 0 8px 24px rgba(191,10,48,0.18);
+    }
+    .path-card.stage {
+      border-color: #dce5f0;
+    }
+    .path-card.goal {
+      border-color: #002868;
+      border-width: 2px;
+    }
+    .path-level {
+      font-weight: 800;
+      font-size: 1.8rem;
+      color: #002868;
+      line-height: 1.1;
+    }
+    .path-card.goal .path-level { color: #BF0A30; }
+    .path-label {
+      font-size: 0.72rem;
+      color: #8a96a3;
+      margin-top: 6px;
+      text-transform: lowercase;
+    }
+    .path-card.next .path-label { color: #BF0A30; font-weight: 600; }
+    .path-card.goal .path-label { color: #BF0A30; font-weight: 600; }
+    .path-time {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #002868;
+      margin-top: 8px;
+    }
+    .path-date {
+      font-size: 0.72rem;
+      color: #8a96a3;
+      margin-top: 2px;
+    }
+    .path-note {
+      background: #eef2f7;
+      border-radius: 16px;
+      padding: 10px 14px;
+      font-size: 0.78rem;
+      color: #002868;
+      margin-top: 14px;
+      text-align: center;
+      line-height: 1.45;
+    }
+    .roadmap-note {
+      background: #eef2f7;
+      border-radius: 16px;
+      padding: 10px 14px;
+      font-size: 0.78rem;
+      color: #002868;
+      margin-top: 12px;
+      text-align: center;
+    }
+    .roadmap-stage {
+      margin-bottom: 22px;
+    }
+    .roadmap-stage:last-child {
+      margin-bottom: 0;
+    }
+    .roadmap-stage-title {
+      display: inline-block;
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #002868;
+      background: #eef2f7;
+      padding: 6px 16px;
+      border-radius: 40px;
+      margin-bottom: 12px;
+    }
+    .feasibility-note {
+      border-radius: 24px;
+      padding: 14px 20px;
+      margin: 16px 0;
+      font-size: 0.92rem;
+      line-height: 1.5;
+      text-align: center;
+      border: 2px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.08);
+    }
+    .feasibility-note.easy {
+      border-color: rgba(0, 168, 232, 0.45);
+      background: rgba(0, 168, 232, 0.16);
+    }
+    .feasibility-note.ok {
+      border-color: rgba(46, 204, 113, 0.45);
+      background: rgba(46, 204, 113, 0.16);
+    }
+    .feasibility-note.warn {
+      border-color: rgba(255, 193, 7, 0.45);
+      background: rgba(255, 193, 7, 0.16);
+    }
+    .feasibility-note.bad {
+      border-color: rgba(191, 10, 48, 0.5);
+      background: rgba(191, 10, 48, 0.25);
+    }
+    .simple-cta {
+      background: rgba(255,255,255,0.08);
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 28px;
+      padding: 20px 22px;
+      margin: 20px 0 0;
+      text-align: center;
+    }
+    .simple-cta p {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 14px;
+      color: rgba(255,255,255,0.92);
+    }
+    .simple-cta-btn {
+      background: #BF0A30;
+      color: white;
+      padding: 12px 28px;
+      border-radius: 40px;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+<div class="calculator">
+  <div class="hero">
+    <h1>🗽 LEVEL UP TRACKER</h1>
+    <div class="sub">укажи свой дедлайн — узнаешь, сколько часов в неделю и в день нужно заниматься</div>
+  </div>
+
+  <div class="trust-badge">
+    📊 <strong>Важно:</strong> Все цифры — по CEFR, Cambridge English. CEFR — международный стандарт, а Cambridge English разрабатывает экзамены и исследования уровней более 100 лет. Их данные точны и признаны во всём мире.  
+    <button id="openSourcesBtn">Подробнее об источниках →</button>
+  </div>
+
+  <div class="content">
+    <div class="section">
+      <div class="section-title">📘 Выбери, какой уровень у тебя сейчас</div>
+      <div class="level-cards" id="currentLevelContainer"></div>
+      <div class="test-button-container">
+        <button class="test-btn" id="openTestBtn">🔍 Не знаешь свой уровень — пройди тест</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">🎯 Уровень, который хочешь достичь</div>
+      <div class="level-hint">Не знаешь, чем отличаются уровни? Нажми на любой — и увидишь что ты сможешь делать.</div>
+      <div class="level-cards" id="targetLevelContainer"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">📅 Какой у тебя дедлайн?</div>
+      <div class="hours-block">
+        <div class="slider-label">⏳ Сколько месяцев у тебя есть на это</div>
+        <input type="range" id="deadlineSlider" min="1" max="48" value="6" step="1">
+        <div class="hours-value" id="deadlineDisplay">6 мес.</div>
+        <div class="quick-hours">
+          <div class="quick-hour-btn" data-months="3">3 мес.</div>
+          <div class="quick-hour-btn" data-months="6">6 мес.</div>
+          <div class="quick-hour-btn" data-months="9">9 мес.</div>
+          <div class="quick-hour-btn" data-months="12">12 мес.</div>
+          <div class="quick-hour-btn" data-months="18">18 мес.</div>
+          <div class="quick-hour-btn" data-months="24">24 мес.</div>
+          <div class="quick-hour-btn" data-months="36">3 года</div>
+          <div class="quick-hour-btn" data-months="48">4 года</div>
+        </div>
+        <div class="teacher-note">💡 Например: «через 6 месяцев экзамен / переезд / собеседование» — поставь 6. Мы посчитаем, сколько тебе нужно заниматься в неделю и в день, чтобы успеть.</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">🎬 Что ещё помогает тебе в английском?</div>
+      <div class="habits-grid" id="habitsContainer">
+        <div class="habit-chip" data-habit="series">🎬 Сериалы / фильмы</div>
+        <div class="habit-chip" data-habit="books">📚 Книги / статьи</div>
+        <div class="habit-chip" data-habit="games">🎮 Игры на английском</div>
+        <div class="habit-chip" data-habit="reels">📱 Рилсы / тикток</div>
+        <div class="habit-chip" data-habit="music">🎧 Подкасты / музыка</div>
+      </div>
+      <div class="extra-tip">
+        💡 Сериалы, подкасты и рилсы на английском ускоряют запоминание слов и тренируют восприятие речи на слух — без дополнительных усилий. Если ты регулярно потребляешь контент на английском, формальных занятий потребуется чуть меньше, чтобы успеть к дедлайну.
+      </div>
+    </div>
+
+    <button class="cta-btn" id="calculateBtn">🚀 Узнать, сколько нужно заниматься 🚀</button>
+
+    <div id="resultBox" class="result-card" style="display: none;"></div>
+  </div>
+  <footer>
+    📊 Источник: CEFR (Совет Европы), Cambridge English, EAQUALS.
+  </footer>
+</div>
+
+<div id="sourcesModal" class="modal">
+  <div class="modal-content">
+    <span class="modal-close">&times;</span>
+    <h3>📚 Источники</h3>
+    <p>CEFR (Common European Framework of Reference), Cambridge English (PET, FCE, CAE), EAQUALS. Данные по часам основаны на исследованиях Cambridge English и рекомендациях Совета Европы.</p>
+  </div>
+</div>
+
+<script>
+  // Данные Cambridge English: кумулятивные часы от нуля
+  // A1: 90-100, A2: 180-200, B1: 350-400, B2: 500-600, C1: 700-800, C2: 1000-1200
+  // Берём средние значения диапазонов → часы между уровнями:
+  const hoursBetween = {
+    "A1-A2": 95, "A2-B1": 180, "B1-B2": 175, "B2-C1": 225, "C1-C2": 325
+  };
+  const allLevels = [
+    { id: "A1", name: "A1",
+      descCurrent: "Знаю пару слов и базовые фразы. Не могу поддержать разговор.",
+      descTarget: "Хочу освоить базу: представляться, понимать простые фразы и выживать в поездке." },
+    { id: "A2", name: "A2",
+      descCurrent: "Понимаю простые фразы, могу представиться и заказать в кафе.",
+      descTarget: "Хочу уметь общаться на бытовые темы, понимать адаптированные тексты и простые сериалы." },
+    { id: "B1", name: "B1",
+      descCurrent: "Говорю на знакомые темы, понимаю адаптированные тексты и сериалы с субтитрами.",
+      descTarget: "Хочу уверенно общаться в путешествиях и на работе, понимать речь без субтитров в простых ситуациях." },
+    { id: "B2", name: "B2",
+      descCurrent: "Свободно общаюсь, понимаю носителей, читаю оригинальные тексты.",
+      descTarget: "Хочу свободно общаться с носителями, читать оригинальные книги и статьи, работать на английском." },
+    { id: "C1", name: "C1",
+      descCurrent: "Говорю бегло, понимаю сложные тексты и акценты, пишу развёрнуто.",
+      descTarget: "Хочу говорить бегло и спонтанно, понимать акценты и писать сложные тексты без усилий." },
+    { id: "C2", name: "C2",
+      descCurrent: "Недоступен как стартовый уровень.",
+      descTarget: "Хочу владеть языком почти как носитель: понимать любые тексты, юмор, культурные отсылки." }
+  ];
+  const levelOrder = ["A1", "A2", "B1", "B2", "C1", "C2"];
+  let currentLevelId = "A2", targetLevelId = "B2", selectedHabits = new Set();
+
+  function formatMonths(n) {
+    const rounded = Math.round(n * 10) / 10;
+    const intPart = Math.floor(rounded);
+    const last2 = intPart % 100;
+    const last1 = intPart % 10;
+    let word;
+    if (last2 >= 11 && last2 <= 14) {
+      word = "месяцев";
+    } else if (last1 === 1) {
+      word = "месяц";
+    } else if (last1 >= 2 && last1 <= 4) {
+      word = "месяца";
+    } else {
+      word = "месяцев";
+    }
+    return `${rounded} ${word}`;
+  }
+
+  // ----- ROADMAP: 5 лексики + 5 грамматики на переход между соседними уровнями -----
+  function getRoadmapSteps(from, to) {
+    const key = `${from}->${to}`;
+    const maps = {
+      "A1->A2": {
+        vocab: [
+          { title: "Daily routines & hobbies", desc: "Расскажешь что делаешь каждый день и чем увлекаешься." },
+          { title: "Food & ordering in a café", desc: "Закажешь еду, спросишь меню, выразишь предпочтения." },
+          { title: "Family & home", desc: "Опишешь членов семьи и свою квартиру/дом." },
+          { title: "Travel: transport & directions", desc: "Купишь билет, спросишь дорогу, сориентируешься в аэропорту." },
+          { title: "Weather & small talk", desc: "Поддержишь простой разговор на нейтральные темы." }
+        ],
+        grammar: [
+          { title: "Present Simple", desc: "Говоришь о фактах, расписании и повседневных делах." },
+          { title: "Past Simple", desc: "Рассказываешь что делал вчера, на выходных, в отпуске." },
+          { title: "to be going to (future)", desc: "Делишься планами на ближайшее будущее." },
+          { title: "Basic prepositions of place", desc: "Точно описываешь где находятся предметы и люди." },
+          { title: "There is / There are", desc: "Описываешь что есть в комнате, городе, магазине." }
+        ]
+      },
+      "A2->B1": {
+        vocab: [
+          { title: "Work & education", desc: "Рассказываешь о профессии, навыках и учебных целях." },
+          { title: "Travel: airport, hotel, problems", desc: "Уверенно решаешь вопросы с бронированием и жалобами." },
+          { title: "Opinions & discussions", desc: "Выражаешь точку зрения: I think, In my opinion, I agree/disagree." },
+          { title: "Movies, books & recommendations", desc: "Делишься впечатлениями и советуешь что посмотреть/почитать." },
+          { title: "Phrasal verbs (get up, turn on…)", desc: "Лучше понимаешь повседневную речь и сериалы." }
+        ],
+        grammar: [
+          { title: "Past Simple vs Present Perfect", desc: "Рассказываешь о прошлом без самой частой ошибки русских." },
+          { title: "Modal verbs: can, must, should", desc: "Выражаешь совет, обязанность или возможность." },
+          { title: "Comparatives & superlatives", desc: "Сравниваешь города, фильмы, людей, продукты." },
+          { title: "Connectors: although, however, because", desc: "Строишь более сложные и связные предложения." },
+          { title: "Zero & First Conditional", desc: "Обсуждаешь реальные ситуации и их последствия." }
+        ]
+      },
+      "B1->B2": {
+        vocab: [
+          { title: "Career & job interviews", desc: "Рассказываешь об опыте и планах — на собеседовании или в переписке." },
+          { title: "Relationships & personal life", desc: "Говоришь о друзьях, семье, личных ситуациях без зависания." },
+          { title: "News, media & current events", desc: "Читаешь англоязычные статьи без словаря по каждому предложению." },
+          { title: "Technology & AI", desc: "Поддерживаешь разговор о гаджетах и цифровых трендах." },
+          { title: "Travel: problems & complaints", desc: "Решаешь проблему с багажом или отменённым рейсом без паники." }
+        ],
+        grammar: [
+          { title: "Reported Speech", desc: "Пересказываешь чужие слова точно и естественно." },
+          { title: "Second & Third Conditional", desc: "Рассуждаешь о гипотетическом и сожалеешь о прошлом." },
+          { title: "Passive Voice", desc: "Понимаешь статьи и инструкции — они почти полностью на passive." },
+          { title: "Past modals (should have, could have)", desc: "Выражаешь «надо было иначе» — без этого речь звучит как A2." },
+          { title: "Gerunds & Infinitives", desc: "'I enjoy doing' вместо 'I enjoy to do' — эта ошибка режет слух носителям." }
+        ]
+      },
+      "B2->C1": {
+        vocab: [
+          { title: "Idioms & fixed expressions", desc: "Говоришь красочно и естественно, понимаешь носителей." },
+          { title: "Business writing & presentations", desc: "Пишешь профессиональный email и уверенно выступаешь." },
+          { title: "Academic & legal vocabulary", desc: "Читаешь контракты, статьи, официальные тексты." },
+          { title: "Subtle meaning & subtext", desc: "Различаешь сарказм, намёки и то, что не сказано прямо." },
+          { title: "Discourse markers (nevertheless, hence…)", desc: "Связываешь мысли элегантно, как образованный носитель." }
+        ],
+        grammar: [
+          { title: "Inversion & emphasis", desc: "Придаёшь речи выразительность: Not only did I…, Rarely have I…" },
+          { title: "Mixed Conditionals", desc: "Описываешь сложные ситуации с временным сдвигом." },
+          { title: "Subjunctive mood", desc: "I wish he were here, It's time you stopped — без кальки с русского." },
+          { title: "Cleft sentences", desc: "What I need is… / It was John who… — акцент без лишних слов." },
+          { title: "Advanced passive structures", desc: "It is said to be… / He is believed to have… — читаешь любые тексты." }
+        ]
+      },
+      "C1->C2": {
+        vocab: [
+          { title: "Humour, irony & cultural references", desc: "Понимаешь тонкий английский юмор и отсылки без объяснений." },
+          { title: "Academic & specialist register", desc: "Читаешь научные статьи и отраслевые тексты без словаря." },
+          { title: "Idiomatic & proverbial language", desc: "Используешь устойчивые выражения к месту — как носитель." },
+          { title: "Accents & dialects", desc: "Понимаешь шотландский, ирландский, австралийский без субтитров." },
+          { title: "Stylistic variation (genre & register)", desc: "Пишешь в разных жанрах: от формального отчёта до острой колонки." }
+        ],
+        grammar: [
+          { title: "Ellipsis & substitution", desc: "Говоришь как носитель: убираешь лишнее, не теряя смысла." },
+          { title: "Advanced modality (nuance & hedging)", desc: "Передаёшь тончайшие оттенки: сомнение, дистанцирование, вежливость." },
+          { title: "Nominalization", desc: "The decision to leave vs he decided to leave — академический стиль." },
+          { title: "Discourse coherence", desc: "Строишь длинный текст или речь с чёткой логикой и переходами." },
+          { title: "Pragmatics & implicature", desc: "Понимаешь не только что сказано, но и что имелось в виду." }
+        ]
+      }
+    };
+    return maps[key] || maps["B1->B2"];
+  }
+
+  function getOutcomeText(targetLevel) {
+    const outcomes = {
+      "A2": "Освоив эти темы, ты сможешь увереннее рассказывать о себе, поддерживать разговор на знакомые темы и понимать большую часть повседневного английского уровня A2.",
+      "B1": "Эти шаги помогут тебе свободнее общаться в путешествиях, на работе и в учёбе. Ты перестанешь бояться говорить и начнёшь понимать адаптированные тексты и видео.",
+      "B2": "Ты сможешь участвовать в дискуссиях, писать развёрнутые сообщения и уверенно говорить на большинство тем. Это уровень для работы и учёбы за рубежом.",
+      "C1": "Ты выйдешь на продвинутый уровень: будешь понимать сложные тексты, говорить бегло и спонтанно, использовать богатую лексику.",
+      "C2": "Ты достигнешь почти свободного владения: будешь понимать всё услышанное и прочитанное, выражать тонкие оттенки смысла."
+    };
+    return outcomes[targetLevel] || "Ты заложишь прочную базу для следующего уровня и начнёшь использовать английский более естественно.";
+  }
+
+  // Полный roadmap по всем этапам пути from -> to
+  function renderFullRoadmap(from, to) {
+    const startIdx = levelOrder.indexOf(from);
+    const endIdx = levelOrder.indexOf(to);
+    const renderCol = (items) => items.map((step, idx) => `
+      <div class="step-item">
+        <div class="step-number">${idx + 1}</div>
+        <div class="step-content">
+          <div class="step-title">${step.title}</div>
+          <div class="step-desc">${step.desc}</div>
+        </div>
+      </div>
+    `).join('');
+
+    let stagesHtml = '';
+    const stagesCount = endIdx - startIdx;
+    for (let i = startIdx; i < endIdx; i++) {
+      const stageFrom = levelOrder[i], stageTo = levelOrder[i + 1];
+      const data = getRoadmapSteps(stageFrom, stageTo);
+      const titleText = stagesCount > 1
+        ? `Этап ${i - startIdx + 1}: ${stageFrom} → ${stageTo}`
+        : `${stageFrom} → ${stageTo}`;
+      stagesHtml += `
+        <div class="roadmap-stage">
+          <div class="roadmap-stage-title">${titleText}</div>
+          <div class="roadmap-columns">
+            <div class="roadmap-col">
+              <div class="roadmap-col-title">📖 Vocabulary</div>
+              <div class="roadmap-steps">${renderCol(data.vocab)}</div>
+            </div>
+            <div class="roadmap-col">
+              <div class="roadmap-col-title">⚙️ Grammar</div>
+              <div class="roadmap-steps">${renderCol(data.grammar)}</div>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    const outcome = getOutcomeText(to);
+    return `
+      <div class="roadmap-container">
+        <div class="roadmap-title">🗺️ Все темы на пути ${from} → ${to}</div>
+        ${stagesHtml}
+        <div class="outcome-card">🚀 <strong>Что это даст</strong> — ${outcome}</div>
+        <div class="roadmap-note">🎯 Это ключевые темы каждого этапа — с них стоит начинать в первую очередь.</div>
+      </div>
+    `;
+  }
+
+  function getHabitsBonus() {
+    const c = selectedHabits.size;
+    return c >= 5 ? 1.10 : c >= 3 ? 1.06 : c >= 1 ? 1.03 : 1.0;
+  }
+  function getTotalHours(c, t) {
+    let s = levelOrder.indexOf(c), e = levelOrder.indexOf(t);
+    if (s >= e) return 0;
+    let total = 0;
+    for (let i = s; i < e; i++) total += hoursBetween[`${levelOrder[i]}-${levelOrder[i+1]}`];
+    return total;
+  }
+  function addMonths(date, m) { let d = new Date(date); d.setMonth(d.getMonth() + m); return d; }
+
+  function getDeadlineMonths() {
+    return parseInt(document.getElementById("deadlineSlider").value) || 1;
+  }
+
+  function renderLevels() {
+    const currentContainer = document.getElementById("currentLevelContainer");
+    const targetContainer = document.getElementById("targetLevelContainer");
+    const startIdx = levelOrder.indexOf(currentLevelId);
+    const availableCurrents = allLevels.filter(l => l.id !== "C2");
+    // Убедимся что targetLevelId всегда выше currentLevelId
+    if (levelOrder.indexOf(targetLevelId) <= levelOrder.indexOf(currentLevelId)) {
+      targetLevelId = levelOrder[levelOrder.indexOf(currentLevelId) + 1] || "B2";
+    }
+    const availableTargets = allLevels.filter(l => levelOrder.indexOf(l.id) > startIdx);
+    function renderCards(container, list, selectedId, onClick, isTarget = false) {
+      container.innerHTML = "";
+      list.forEach(level => {
+        let disabled = isTarget && levelOrder.indexOf(level.id) <= levelOrder.indexOf(currentLevelId);
+        let card = document.createElement("div");
+        card.className = `level-card ${selectedId === level.id ? 'selected' : ''} ${disabled ? 'disabled' : ''}`;
+        const desc = isTarget ? level.descTarget : level.descCurrent;
+        card.innerHTML = `<div class="level-name">${level.name}</div><div class="level-desc">${desc}</div>`;
+        if (!disabled) card.addEventListener("click", () => onClick(level.id));
+        container.appendChild(card);
+      });
+    }
+    renderCards(currentContainer, availableCurrents, currentLevelId, (id) => {
+      currentLevelId = id;
+      const nextIdx = levelOrder.indexOf(id) + 1;
+      if (nextIdx < levelOrder.length) targetLevelId = levelOrder[nextIdx];
+      renderLevels();
+      saveToLocalStorage();
+    });
+    renderCards(targetContainer, availableTargets, targetLevelId, (id) => { targetLevelId = id; renderLevels(); saveToLocalStorage(); }, true);
+  }
+
+  function updateUI() {
+    document.querySelectorAll(".habit-chip").forEach(chip => {
+      let habit = chip.getAttribute("data-habit");
+      if (selectedHabits.has(habit)) chip.classList.add("selected");
+      else chip.classList.remove("selected");
+    });
+  }
+
+  function saveToLocalStorage() {
+    localStorage.setItem("levelup_current", currentLevelId);
+    localStorage.setItem("levelup_target", targetLevelId);
+    localStorage.setItem("levelup_deadline_months", document.getElementById("deadlineSlider").value);
+    localStorage.setItem("levelup_habits", JSON.stringify([...selectedHabits]));
+  }
+  function loadFromLocalStorage() {
+    let c = localStorage.getItem("levelup_current");
+    let t = localStorage.getItem("levelup_target");
+    let dm = localStorage.getItem("levelup_deadline_months");
+    let hab = localStorage.getItem("levelup_habits");
+    if (c) currentLevelId = c;
+    if (t) targetLevelId = t;
+    if (dm) {
+      document.getElementById("deadlineSlider").value = Math.min(48, Math.max(1, Math.round(parseFloat(dm))));
+    }
+    if (hab) selectedHabits = new Set(JSON.parse(hab));
+    updateDeadlineDisplay();
+  }
+  function updateDeadlineDisplay() {
+    const m = getDeadlineMonths();
+    document.getElementById("deadlineDisplay").innerText = m + " мес.";
+  }
+
+  document.getElementById("deadlineSlider").addEventListener("input", () => { updateDeadlineDisplay(); saveToLocalStorage(); });
+  document.querySelectorAll(".quick-hour-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.getElementById("deadlineSlider").value = btn.getAttribute("data-months");
+      updateDeadlineDisplay();
+      saveToLocalStorage();
+    });
+  });
+  document.getElementById("openTestBtn").addEventListener("click", () => window.open("https://www.cambridgeenglish.org/test-your-english/general-english/", "_blank"));
+
+  // Строим временную шкалу: месяцы пропорционально часам каждого этапа в рамках общего дедлайна
+  function buildPathTimeline(currentId, targetId, deadlineMonths, totalH) {
+    const startIdx = levelOrder.indexOf(currentId);
+    const endIdx = levelOrder.indexOf(targetId);
+    const now = new Date();
+    let hoursAccum = 0;
+    const nodeData = {};
+    for (let i = startIdx; i < endIdx; i++) {
+      hoursAccum += hoursBetween[`${levelOrder[i]}-${levelOrder[i + 1]}`];
+      const m = (hoursAccum / totalH) * deadlineMonths;
+      const d = addMonths(now, Math.round(m));
+      nodeData[levelOrder[i + 1]] = { months: m, date: d };
+    }
+
+    const pathLevels = levelOrder.slice(startIdx, endIdx + 1);
+    let html = '<div class="path-timeline-wrap"><div class="path-timeline-title">🗺️ Твой путь по месяцам</div><div class="path-timeline">';
+    pathLevels.forEach((lvl, idx) => {
+      if (idx > 0) html += '<div class="path-arrow">→</div>';
+      let cardClass = 'stage';
+      let label = 'этап';
+      let timeHtml = '';
+      if (lvl === currentId) {
+        cardClass = 'current';
+        label = 'сейчас · старт';
+      } else if (lvl === targetId) {
+        cardClass = 'goal';
+        label = 'цель · дедлайн';
+        const d = addMonths(now, Math.round(deadlineMonths));
+        timeHtml = `<div class="path-time">${formatMonths(deadlineMonths)}</div><div class="path-date">${d.toLocaleDateString('ru-RU', { year: 'numeric', month: 'short' })}</div>`;
+      } else {
+        const nd = nodeData[lvl];
+        timeHtml = `<div class="path-time">${formatMonths(nd.months)}</div><div class="path-date">${nd.date.toLocaleDateString('ru-RU', { year: 'numeric', month: 'short' })}</div>`;
+      }
+      html += `<div class="path-card ${cardClass}">
+        <div class="path-level">${lvl}</div>
+        <div class="path-label">${label}</div>
+        ${timeHtml}
+      </div>`;
+    });
+    html += '</div></div>';
+    return html;
+  }
+
+  document.getElementById("calculateBtn").addEventListener("click", () => {
+    if (currentLevelId === targetLevelId) {
+      document.getElementById("resultBox").innerHTML = `<div style="text-align:center;">🎯 Ты уже на этом уровне! Поддерживай форму.</div>`;
+      document.getElementById("resultBox").style.display = "block";
+      document.getElementById("resultBox").scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+    if (levelOrder.indexOf(currentLevelId) >= levelOrder.indexOf(targetLevelId)) {
+      document.getElementById("resultBox").innerHTML = `<div style="text-align:center;">🤔 Цель должна быть выше текущего уровня.</div>`;
+      document.getElementById("resultBox").style.display = "block";
+      document.getElementById("resultBox").scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+    let btn = document.getElementById("calculateBtn");
+    let orig = btn.innerText;
+    btn.innerText = "⏳ Считаем...";
+    btn.classList.add("calculating");
+    btn.disabled = true;
+    setTimeout(() => {
+      const deadlineMonths = getDeadlineMonths();
+      const totalH = getTotalHours(currentLevelId, targetLevelId);
+      const habitBonus = getHabitsBonus();
+
+      // Сколько эффективных часов в неделю нужно, чтобы пройти totalH часов за deadlineMonths
+      const weeksAvailable = deadlineMonths * (52 / 12);
+      const weeklyEffective = totalH / weeksAvailable;
+      // Привычки (сериалы, подкасты и тд) дают часть прогресса "бесплатно" — реальная нагрузка ниже
+      const weeklyActual = weeklyEffective / habitBonus;
+      const dailyActual = weeklyActual / 7;
+
+      let feasibilityClass, feasibilityText;
+      if (weeklyActual < 1.5) {
+        feasibilityClass = "easy";
+        feasibilityText = `😌 У тебя более чем достаточно времени — это очень комфортный темп. Можно даже замедлиться или поставить более амбициозную цель.`;
+      } else if (weeklyActual <= 12) {
+        feasibilityClass = "ok";
+        feasibilityText = `✅ Реалистичный темп — например, 2–4 занятия в неделю плюс немного самостоятельной практики.`;
+      } else if (weeklyActual <= 20) {
+        feasibilityClass = "warn";
+        feasibilityText = `⚡ Темп интенсивный — почти ежедневная практика. Реально, но потребует дисциплины и регулярности.`;
+      } else {
+        feasibilityClass = "bad";
+        feasibilityText = `🔥 Это очень напряжённый график — почти как ещё одна работа. Если такой темп не реалистичен, попробуй увеличить срок или выбрать более близкую промежуточную цель (например, сначала ${levelOrder[levelOrder.indexOf(currentLevelId) + 1]}).`;
+      }
+
+      const pathHtml = buildPathTimeline(currentLevelId, targetLevelId, deadlineMonths, totalH);
+      const roadmapHtml = renderFullRoadmap(currentLevelId, targetLevelId);
+      const trustHtml = `<div class="trust-method">📐 Методика: данные Cambridge English (guided learning hours). Путь ${currentLevelId}→${targetLevelId} — ~${totalH} ч в сумме.</div>`;
+
+      const finalCtaHtml = `<div class="simple-cta">
+        <p>🧭 Не хочешь строить маршрут и заниматься самостоятельно? Приходи учиться ко мне — у меня доступны разные форматы.</p>
+        <a href="https://englishcoven.tilda.ws/eng" class="simple-cta-btn" target="_blank">Посмотреть форматы →</a>
+      </div>`;
+
+      const summaryHtml = `
+        <div class="result-summary">
+          <div class="result-summary-card next" style="flex: 1 1 100%;">
+            <div class="result-summary-label">Чтобы успеть за ${formatMonths(deadlineMonths)}</div>
+            <div class="result-summary-level">${currentLevelId} → ${targetLevelId}</div>
+            <div class="months-big">${weeklyActual.toFixed(1)} ч/нед.</div>
+            <div class="result-summary-date">≈ ${dailyActual.toFixed(1)} ч/день</div>
+            <div class="result-summary-meta">Всего ~${totalH} ч на весь путь ${currentLevelId}→${targetLevelId}</div>
+          </div>
+        </div>`;
+
+      const feasibilityHtml = `<div class="feasibility-note ${feasibilityClass}">${feasibilityText}</div>`;
+
+      document.getElementById("resultBox").innerHTML = `
+        <div style="font-size:1.2rem; font-weight:500; text-align:center;">Вот твой план на ${formatMonths(deadlineMonths)}</div>
+        ${summaryHtml}
+        ${feasibilityHtml}
+        ${pathHtml}
+        ${roadmapHtml}
+        ${trustHtml}
+        ${finalCtaHtml}
+      `;
+      document.getElementById("resultBox").style.display = "block";
+      document.getElementById("resultBox").scrollIntoView({ behavior: "smooth" });
+      btn.innerText = orig;
+      btn.classList.remove("calculating");
+      btn.disabled = false;
+    }, 1000);
+  });
+
+  document.querySelectorAll(".habit-chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      let h = chip.getAttribute("data-habit");
+      if (selectedHabits.has(h)) selectedHabits.delete(h);
+      else selectedHabits.add(h);
+      updateUI();
+      saveToLocalStorage();
+    });
+  });
+
+  let modal = document.getElementById("sourcesModal");
+  document.getElementById("openSourcesBtn").onclick = () => modal.style.display = "flex";
+  document.querySelector(".modal-close").onclick = () => modal.style.display = "none";
+  window.onclick = (e) => { if (e.target === modal) modal.style.display = "none"; };
+
+  loadFromLocalStorage();
+  renderLevels();
+  updateUI();
+  updateDeadlineDisplay();
+  document.getElementById("resultBox").style.display = "none";
+</script>
+</body>
+</html>
